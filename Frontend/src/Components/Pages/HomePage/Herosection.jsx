@@ -1,7 +1,9 @@
 import React from 'react'
 import {ChevronDown} from "lucide-react"
+import { useNavigate } from 'react-router-dom'
 
 const Herosection = () => {
+  const navigate = useNavigate()
 
     const vahicales = [
         {
@@ -27,6 +29,11 @@ const Herosection = () => {
     ]
 
 
+    const HandelClickTruck = (id) => {
+      navigate(`/trucksDetails/${id}`)
+    }
+
+
 
   return (
     <div className='min-h-screen'>
@@ -41,7 +48,7 @@ const Herosection = () => {
 
         <div className='flex items-center justify-center gap-5 mt-14'>
             {vahicales.map((item) => (
-            <div key={item.id} className='flex items-center justify-between flex-col gap-5 '>
+            <div onClick={() => HandelClickTruck(item.id)} key={item.id} className='flex items-center justify-between flex-col gap-5 '>
                 <img className='h-32 w-44 object-cover bg-gray-300 rounded-lg' src={item.imgae} alt="" />
                 <h5 className='text-black'>{item.name}</h5>
             </div>

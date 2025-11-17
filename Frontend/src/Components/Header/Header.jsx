@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
@@ -9,9 +10,14 @@ const Header = () => {
                 LabhRoot
             </div>
             <div className='flex items-center justify-between gap-5'>
-                <p className='text-white'>For-Enterprices</p>
-                <p className='text-white'>Driver-Patner</p>
-                <p className='text-white'>Support</p>
+              <Link to="/" className='text-white'>Home</Link>
+              <Link to="/order" className='text-white'>Order</Link>
+                <select name="" id="" className='bg-gray-700'>
+                  <option value="#">menu</option>
+                  <option value="#"><Link to="/" className='text-white'>Account</Link></option>
+                  <option value="#"><Link to="/" className='text-white'>Payment</Link></option>
+                  <option value="#"><Link to="/" className='text-white'>Coins</Link></option>
+                </select>
             </div>
         </nav>
       
