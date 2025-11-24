@@ -76,9 +76,6 @@ const TrucksDetails = () => {
 
 
 
-
-
-
   return (
     <div className="min-h-screen">
       <div>

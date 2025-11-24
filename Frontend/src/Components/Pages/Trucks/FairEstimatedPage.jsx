@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { MapPin, Phone, X, ChevronRight } from "lucide-react";
+import { MapPin, Phone, X, ChevronRight,CreditCard,Banknote } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function VehicleBooking() {
+  const navigat = useNavigate();
   const [selectedVehicle, setSelectedVehicle] = useState("open");
   const [showEditModal, setShowEditModal] = useState(false);
   const [showGoodsModal, setShowGoodsModal] = useState(false);
   const [selectCategory ,setSelectCategory] = useState("");
+  const [paymentmode ,setPayementmode] = useState("")
 
-  console.log("select",selectCategory);
 
   const [editData, setEditData] = useState({
     address: "Shivajinagar, Pune, Maharashtra, India",
@@ -30,6 +32,19 @@ export default function VehicleBooking() {
 
   const handelCategorySelect = (g) => {
     setSelectCategory(g)
+  }
+
+  const handelClose = () => {
+    setShowGoodsModal(false)
+    setSelectCategory("")
+  }
+
+  const handelClose2 = () => {
+    setShowGoodsModal(false)
+  }
+
+  const handelBooking = () => {
+    navigat(`/BookingSuccefully/:id`)
   }
 
   const vehicles = [
@@ -151,14 +166,21 @@ export default function VehicleBooking() {
           <p className="font-bold text-lg">₹ 859</p>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-700 mt-2">
-          <span className="p-1 border rounded"><Phone size={18} /></span>
-          <span>Cash</span>
+        <div className="flex items-center justify-start gap-1">
+          {paymentmode === "cash" ? <Banknote  size={18} /> : <CreditCard size={18} /> }
+          <select className="border-none outline-none" name="" id="" value={paymentmode} onChange={(e) => setPayementmode(e.target.value)}>
+            <option value="cash"> Cash</option>
+            <option value="online">Online</option>
+          </select>
         </div>
 
-        <button  onClick={() => setShowGoodsModal(true)} className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700">
+
+
+        {!selectCategory.length > 0 ? <button  onClick={() => setShowGoodsModal(true)} className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700">
           Select Goods Type
-        </button>
+        </button> :
+        <button onClick={handelBooking} className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700">Book now</button>
+        }
       </div>
 
       {/* EDIT MODAL */}
@@ -212,7 +234,7 @@ export default function VehicleBooking() {
       {showGoodsModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white w-full max-w-xl rounded-2xl p-6 relative max-h-[80vh] overflow-y-auto">
-            <button className="absolute right-4 top-4" onClick={() => setShowGoodsModal(false)}>
+            <button className="absolute right-4 top-4" onClick={handelClose}>
               <X size={22} />
             </button>
 
@@ -226,8 +248,8 @@ export default function VehicleBooking() {
               ))}
             </div>
 
-            <button  className={`w-full ${selectCategory.length > 0 ? "bg-blue-600" : "bg-gray-300"} text-white py-3 rounded-lg text-lg font-semibold`}>
-              Book Now
+            <button onClick={handelClose2}  className={`w-full ${selectCategory.length > 0 ? "bg-blue-600" : "bg-gray-300"} text-white py-3 rounded-lg text-lg font-semibold`}>
+              Update category
             </button>
           </div>
         </div>
