@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { MapPin, Phone, X, ChevronRight,CreditCard,Banknote } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 export default function VehicleBooking() {
   const navigat = useNavigate();
@@ -10,6 +12,12 @@ export default function VehicleBooking() {
   const [selectCategory ,setSelectCategory] = useState("");
   const [paymentmode ,setPayementmode] = useState("")
 
+  const [pickup, setPickup] = useState("");
+    const [drop, setDrop] = useState("");
+    const [pickupSug, setPickupSug] = useState([]);
+    const [dropSug, setDropSug] = useState([]);
+    console.log(pickup)
+    console.log(pickupSug)
 
   const [editData, setEditData] = useState({
     address: "Shivajinagar, Pune, Maharashtra, India",
@@ -74,7 +82,46 @@ export default function VehicleBooking() {
     },
   ];
 
+
+
+  // ✅ Fetch Pickup suggestions
+  const fetchPickup = async (text) => {
+    setPickup(text);
+    if (!text) return setPickupSug([]);
+
+    const res = await axios.get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json`,
+      {
+        params: {
+          access_token: MAPBOX_TOKEN,
+          country: "IN",
+          limit: 5,
+        },
+      }
+    );
+    setPickupSug(res.data.features);
+  };
+
+  // ✅ Fetch Drop suggestions
+  const fetchDrop = async (text) => {
+    setDrop(text);
+    if (!text) return setDropSug([]);
+
+    const res = await axios.get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json`,
+      {
+        params: {
+          access_token: MAPBOX_TOKEN,
+          country: "IN",
+          limit: 5,
+        },
+      }
+    );
+    setDropSug(res.data.features);
+  };
+
   return (
+    <>
     <div className="w-full min-h-screen bg-gray-100 p-6 flex gap-6 relative">
       {/* LEFT SIDE */}
       <div className="w-1/2 bg-white shadow rounded-xl p-6">
@@ -184,8 +231,8 @@ export default function VehicleBooking() {
       </div>
 
       {/* EDIT MODAL */}
-      {showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      {/* {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
           <div className="bg-white w-full max-w-lg rounded-2xl p-6 relative">
             <button className="absolute right-4 top-4" onClick={() => setShowEditModal(false)}>
               <X size={22} />
@@ -194,11 +241,36 @@ export default function VehicleBooking() {
             <h2 className="text-2xl font-bold mb-6">Edit Drop location</h2>
 
             <div className="space-y-4">
+              <div>
+
+                
+           
               <input
                 className="w-full border p-3 rounded-lg"
-                value={editData.address}
-                onChange={(e) => setEditData({ ...editData, address: e.target.value })}
+                value={pickup}
+                name="address"
+                id="address"
+                onChange={(e) => fetchPickup(e.target.value)}
+                // onChange={(e) => setEditData({ ...editData, address: e.target.value })}
               />
+
+              {pickupSug.length > 0 && (
+                <div className="absolute top-full left-0 bg-white border w-full z-50 max-h-40 overflow-y-auto">
+                  {pickupSug.map((item) => (
+                    <p
+                      key={item.id}
+                      className="p-2 hover:bg-gray-100 cursor-pointer text-black text-sm"
+                      onClick={() => {
+                        setPickup(item.place_name);
+                        setPickupSug([]);
+                      }}
+                    >
+                      {item.place_name}
+                    </p>
+                  ))}
+                </div>
+              )}
+              </div>
 
               <input
                 className="w-full border p-3 rounded-lg"
@@ -228,7 +300,97 @@ export default function VehicleBooking() {
             </button>
           </div>
         </div>
-      )}
+      )} */}
+
+
+      {/* EDIT MODAL */}
+{showEditModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
+    <div className="bg-white w-full max-w-lg rounded-2xl p-6 relative">
+
+      <button
+        className="absolute right-4 top-4"
+        onClick={() => setShowEditModal(false)}
+      >
+        <X size={22} />
+      </button>
+
+      <h2 className="text-2xl font-bold mb-6">Edit Drop location</h2>
+
+      <div className="space-y-4">
+
+        {/* PICKUP LOCATION */}
+        <div className="relative">
+          <input
+            className="w-full border p-3 rounded-lg"
+            placeholder="Pickup location"
+            value={ pickup}
+            onChange={(e) => {
+              const value = e.target.value;
+              setPickup(value);
+              fetchPickup(value);
+            }}
+          />
+
+          {pickupSug.length > 0 && (
+            <div className="absolute top-full left-0 right-0 bg-white border rounded-lg shadow-md z-50 max-h-40 overflow-y-auto">
+              {pickupSug.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-2 hover:bg-gray-100 cursor-pointer text-sm"
+                  onMouseDown={() => {
+                    setPickup(item.place_name);
+                    setPickupSug([]);
+                  }}
+                >
+                  {item.place_name}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* HOUSE */}
+        <input
+          className="w-full border p-3 rounded-lg"
+          placeholder="House / Apartment (optional)"
+          value={editData.house}
+          onChange={(e) =>
+            setEditData({ ...editData, house: e.target.value })
+          }
+        />
+
+        {/* NAME */}
+        <input
+          className="w-full border p-3 rounded-lg"
+          placeholder="Name"
+          value={editData.name}
+          onChange={(e) =>
+            setEditData({ ...editData, name: e.target.value })
+          }
+        />
+
+        {/* PHONE */}
+        <input
+          className="w-full border p-3 rounded-lg"
+          placeholder="Phone"
+          value={editData.phone}
+          onChange={(e) =>
+            setEditData({ ...editData, phone: e.target.value })
+          }
+        />
+      </div>
+
+      <button
+        onClick={() => setShowEditModal(false)}
+        className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold"
+      >
+        Confirm and Proceed
+      </button>
+    </div>
+  </div>
+)}
+
 
       {/* GOODS TYPE MODAL */}
       {showGoodsModal && (
@@ -255,5 +417,6 @@ export default function VehicleBooking() {
         </div>
       )}
     </div>
+    </>
   );
 }

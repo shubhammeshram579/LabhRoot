@@ -3,6 +3,8 @@ import { Phone, MapPin, CheckCircle, XCircle } from "lucide-react";
 
  const  BookingSuccefully = () => {
   const [bookingCancelled, setBookingCancelled] = useState(false);
+  const [isshow,setIsshow] = useState(true)
+  const [rebooking, setRebooking] = useState(false);
   const [driverLocation, setDriverLocation] = useState({ lat: 18.5616, lng: 73.7897 });
 
   const driver = {
@@ -33,7 +35,50 @@ import { Phone, MapPin, CheckCircle, XCircle } from "lucide-react";
     return () => clearInterval(interval);
     }, []);
 
+
+    const handelCancelBooking  = () => {
+      setBookingCancelled(true)
+    }
+
+    const handelRebooking  = () => {
+      setRebooking(true)
+      setBookingCancelled(false)
+    }
+
+    const handelcancl = () => {
+      setIsshow(false)
+    }
+
+    const handelback = () => {
+      setIsshow(true)
+    }
+
   return (
+
+    <>
+    {isshow === false && 
+       <div className="min-h-screen flex items-center justify-center bg-white/50">
+        <div className="flex items-center flex-col bg-white rounded-lg py-5 px-5">
+          <h1 className="text-3xl">Why do you want cancel?</h1>
+          <div className="ml-2 mt-4">
+          <p className="text-lg"><input type="checkbox"  className="rounded mr-2" />Driver was not Allocated</p>
+          <p className="text-lg"><input type="checkbox" className="rounded mr-2" />Change my mind</p>
+          <p className="text-lg"><input type="checkbox" className="rounded mr-2" />My reason  is not listed</p>
+
+          <textarea name="" id="" cols={40} rows={2}></textarea>
+
+          <div className="flex items-center justify-center gap-5  mt-5">
+            <button onClick={handelback} className="bg-gray-300 rounded-lg px-2 py-2 w-full">Go back</button>
+            <button onClick={handelRebooking} className="bg-red-600 px-2 py-2 rounded-lg w-full text-white">confirm Cancel</button>
+          </div>
+          </div>
+
+          
+        </div>
+        </div>
+        }
+
+    {isshow === true &&
     <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-start">
         <div className="w-full min-h-screen mx-2">
           <div className="w-full h-[85vh] rounded-xl overflow-hidden border px-5 py-2 bg-white">
@@ -48,6 +93,7 @@ import { Phone, MapPin, CheckCircle, XCircle } from "lucide-react";
           ></iframe>
         </div>
         </div>
+        
       <div className="bg-white w-full max-w-2xl shadow-lg rounded-2xl p-8 relative">
         {/* Success or Cancel Banner */}
         <div className="flex items-center gap-3 mb-6">
@@ -128,27 +174,27 @@ import { Phone, MapPin, CheckCircle, XCircle } from "lucide-react";
         </div>
 
         {/* BUTTONS */}
-        {!bookingCancelled && (
+        {/* {!bookingCancelled && ( */}
           <button
-            onClick={() => setBookingCancelled(true)}
+            onClick={handelcancl}
             className="w-full bg-gray-200 text-red-500 py-3 rounded-lg text-lg font-semibold hover:bg-red-700 hover:text-white"
           >
             Cancel Booking
           </button>
-        )}
+        {/* )} */}
 
-        {bookingCancelled && (
-          <button
+        
+        {/* {rebooking && ( */}
+          {/* <button
             onClick={() => setBookingCancelled(false)}
             className="w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700"
           >
             Rebook Again
-          </button>
-        )}
-      </div>
-
-      
-    </div>
+          </button> */}
+        {/* )} */}
+      </div> 
+    </div>}
+    </>
   );
 }
 

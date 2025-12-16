@@ -10,6 +10,8 @@ import CusOrder from "./Components/Pages/Order/CusOrder"
 import TrucksDetails from "./Components/Pages/Trucks/TrucksDetails"
 import VehicleBooking from './Components/Pages/Trucks/FairEstimatedPage'
 import BookingSuccefully from './Components/Pages/Trucks/BookingSuccefully'
+import DeliveryMap from './Components/Pages/testchatgpt/DeliveryMap'
+import TrackRider from './Components/Pages/Testchatgpt/TrackRider'
 
 function App() {
 
@@ -25,6 +27,8 @@ function App() {
           <Route path='/trucksDetails/:id' element={<TrucksDetails />} />
           <Route path='/VehicleBooking' element={<VehicleBooking />} />
           <Route path='/BookingSuccefully/:id' element={<BookingSuccefully />} />
+          <Route path='/DeliveryMap' element={<DeliveryMap />} />
+          <Route path='/TrackRider' element={<TrackRider />} />
         </Routes>
         </BrowserRouter>
       </div>
