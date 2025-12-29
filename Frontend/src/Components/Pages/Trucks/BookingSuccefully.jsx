@@ -14,6 +14,7 @@ const socket = io("http://localhost:5000", {
 
 const BookingSuccefully = () => {
   const mapContainerRef = useRef(null);
+  const tripCompletedRef = useRef(false);
   const pendingRouteRef = useRef(null);
   const mapRef = useRef(null);
   const driverMarkerRef = useRef(null);
@@ -22,6 +23,7 @@ const BookingSuccefully = () => {
   const [isshow, setIsshow] = useState(true);
   const [bookingCancelled, setBookingCancelled] = useState(false);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [status, setStatus] = useState("Driver assigned");
 
   // 📍 STATIC COORDS (later geocode dynamically)
   const pickupCoords = { lat: 18.5642, lng: 73.7769 };
@@ -76,7 +78,7 @@ useEffect(() => {
             coordinates: [pickupCoords.lng, pickupCoords.lat],
           },
           properties: {
-            bearing: 0,
+            bearing: + 180,
           },
         },
       });
@@ -197,6 +199,14 @@ const getClosestRouteIndex = (route, point) => {
 };
 
 
+const isNearDestination = (lat, lng, dest, threshold = 0.00015) => {
+  return (
+    Math.abs(lat - dest.lat) < threshold &&
+    Math.abs(lng - dest.lng) < threshold
+  );
+};
+
+
 
 useEffect(() => {
   if (!mapLoaded || trackingStartedRef.current) return;
@@ -210,6 +220,7 @@ useEffect(() => {
 
   setEta(Math.ceil(duration / 60));
   drawRoute(coordinates);
+  setStatus("Driver heading to pickup")
 });
 
 
@@ -221,7 +232,7 @@ socket.on("driverLocation", ({ lat, lng }) => {
   const driverSource = map.getSource("driver");
   if (!driverSource) return;
 
-  let bearing = 0;
+  let bearing = + 180;
   if (lastPositionRef.current) {
     bearing = getBearing(
       lastPositionRef.current,
@@ -241,39 +252,77 @@ socket.on("driverLocation", ({ lat, lng }) => {
   });
 
   /* ---------------- ROUTE MOVE ---------------- */
+
   if (fullRouteRef.current.length > 0) {
-    const index = getClosestRouteIndex(
-      fullRouteRef.current,
-      [lng, lat]
-    );
+  const reached = isNearDestination(lat, lng, dropCoords);
 
-    const remainingRoute = fullRouteRef.current.slice(index);
+  const routeSource = map.getSource("route");
+  if (!routeSource) return;
 
-    if (remainingRoute.length > 1) {
-      const routeSource = map.getSource("route");
-      if (routeSource) {
-        routeSource.setData({
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: remainingRoute,
-          },
-        });
-      }
-    }
+  if (reached) {
+    // 🟢 KEEP FULL ROUTE ON COMPLETION
+    routeSource.setData({
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: fullRouteRef.current,
+      },
+    });
+    return;
   }
 
+  const index = getClosestRouteIndex(
+    fullRouteRef.current,
+    [lng, lat]
+  );
+
+  const remainingRoute = fullRouteRef.current.slice(index);
+
+  if (remainingRoute.length > 1) {
+    routeSource.setData({
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: remainingRoute,
+      },
+    });
+  }
+}
+
+
   /* ---------------- CAMERA FOLLOW ---------------- */
+  // tripCompletedRef.current = true;
+
+  if (!tripCompletedRef.current) {
   map.easeTo({
     center: [lng, lat],
     duration: 1000,
   });
+}
+});
+
+socket.on("tripCompleted", () => {
+   tripCompletedRef.current = true;
+  const map = mapRef.current;
+  if (!map) return;
+
+  // 🔹 Change route color to green (completed)
+  if (map.getLayer("route-layer")) {
+    map.setPaintProperty("route-layer", "line-color", "#16a34a");
+  }
+
+  // 🔹 Optional: stop camera + center on destination
+  map.easeTo({
+    center: [dropCoords.lng, dropCoords.lat],
+    zoom: 15,
+    duration: 1500,
+  });
+
+  alert("📦 Delivery completed");
+  setStatus("Delivered")
 });
 
 
-  socket.on("tripCompleted", () => {
-    alert("📦 Delivery completed");
-  });
 
   socket.on("etaUpdate", setEta);
 
@@ -318,6 +367,7 @@ socket.on("driverLocation", ({ lat, lng }) => {
             {!bookingCancelled && (
               <div className="border p-4 rounded-xl mb-4 bg-gray-50">
                 <h2 className="font-semibold mb-2">Driver Details</h2>
+                <p className="text-sm text-gray-600 mt-2">{status}</p>
                 <p>{driver.name}</p>
                 <p className="flex items-center gap-2 text-sm">
                   <Phone size={14} /> {driver.phone}
@@ -348,22 +398,22 @@ socket.on("driverLocation", ({ lat, lng }) => {
               </div>
             </div>
 
-            <button
+            {/* <button
               onClick={() => setIsshow(false)}
               className="mt-6 w-full bg-gray-200 text-red-500 py-3 rounded-lg hover:bg-red-600 hover:text-white"
             >
               Cancel Booking
-            </button>
+            </button> */}
+
+            <button
+            disabled={status === "Package picked up" || status === "Delivered"}
+            className="mt-6 w-full bg-gray-200 text-red-500 py-3 rounded-lg disabled:opacity-50"
+          >
+            Cancel Booking
+          </button>
           </div>
         </div>
       )}
-
-      <button
-  onClick={() => {
-    socket.disconnect();
-    setIsshow(false);
-  }}
->dddd</button>
     </>
   );
 };
