@@ -1,7 +1,7 @@
 import expores from "express"
 import {ApiError} from "../Utils/apiErrors.js"
 import {ApiResponse} from "../Utils/apiResponse.js"
-import Users from "../Models/user.model.js"
+import {Users} from "../Models/user.model.js"
 
 
 
@@ -33,7 +33,7 @@ const UserRegiter =  async (req,res) => {
         }
 
         const UserExite = await Users.findOne(
-            {$or: [{username},{email}]}
+            {$or: [{email}]}
         )
 
         if(UserExite){
@@ -54,7 +54,7 @@ const UserRegiter =  async (req,res) => {
         }
 
         return res.status(200).json(
-             new ApiResponse(200,createUser,"User registered succesfully")
+             new ApiResponse(200,{createUser},"User registered succesfully")
 
         )
 
@@ -78,7 +78,7 @@ const UserLogin = async (req,res) => {
         }
 
         const user = await Users.findOne({
-            $or: [{username}, {email}]
+            $or: [{email}]
         })
 
         if(!user){
