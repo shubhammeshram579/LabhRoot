@@ -12,6 +12,8 @@ import VehicleBooking from './Components/Pages/Trucks/FairEstimatedPage'
 import BookingSuccefully from './Components/Pages/Trucks/BookingSuccefully'
 import DeliveryMap from './Components/Pages/testchatgpt/DeliveryMap'
 import TrackRider from './Components/Pages/Testchatgpt/TrackRider'
+import Login from './Components/users/Login'
+import Registers from './Components/users/registers'
 
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
           <Route path='/BookingSuccefully/:id' element={<BookingSuccefully />} />
           <Route path='/DeliveryMap' element={<DeliveryMap />} />
           <Route path='/TrackRider' element={<TrackRider />} />
+          <Route path='/Login' element={<Login />} />
+          <Route path='/Registers' element={<Registers />} />
         </Routes>
         </BrowserRouter>
       </div>

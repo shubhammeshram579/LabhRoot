@@ -12,11 +12,13 @@ const Header = () => {
             <div className='flex items-center justify-between gap-5'>
               <Link to="/" className='text-white'>Home</Link>
               <Link to="/order" className='text-white'>Order</Link>
+              <Link to="/Login" className='text-white'>Login</Link>
                 <select name="" id="" className='bg-gray-700'>
                   <option value="#">menu</option>
                   <option value="#"><Link to="/" className='text-white'>Account</Link></option>
                   <option value="#"><Link to="/" className='text-white'>Payment</Link></option>
                   <option value="#"><Link to="/" className='text-white'>Coins</Link></option>
+                  <Link to="/Login" className='text-white'><option value="Login">Login</option></Link>
                 </select>
             </div>
         </nav>
