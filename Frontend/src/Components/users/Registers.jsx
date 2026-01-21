@@ -1,11 +1,136 @@
-import React from 'react'
+import React, { useState } from "react";
+import { Link,useNavigate } from "react-router-dom";
+import img from "..//..//../public/dellevry.jpg";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import axios from "axios";
 
 const Registers = () => {
-  return (
-    <div>
-      Registers
-    </div>
-  )
-}
+  const navigate = useNavigate()
+  const [userform, setUserform] = useState({});
 
-export default Registers
+  const handelform = (e) => {
+    const { name, value } = e.target;
+    setUserform((values) => ({ ...values, [name]: value }));
+  };
+
+  const handelSumbit = async () => {
+    try {
+      const res = await axios.post(`http://localhost:8000/api/users/createUsers`,
+        userform,
+      );
+
+      
+      navigate(`/Login`)
+    } catch (error) {
+      console.log("api error ", error.message);
+    }
+  };
+
+  return (
+    <>
+      <div className="flex items-center justify-center w-full min-h-screen ">
+        <div className="flex items-center justify-center flex-row-reverse gap-4 bg-gray-100 px-2 py-2">
+          <div>
+            <img src={img} alt="" className="h-[75vh] w-[27vw] object-cover" />
+          </div>
+          <div className="space-y-5">
+            <div>
+              <h1 className="text-2xl font-semibold uppercase">
+                Welcome to LabhRouts
+              </h1>
+              <p>Sign Up your account</p>
+            </div>
+
+            <form
+              onSubmit={handelSumbit}
+              className="bg-gray-100 px-5 py-2 space-y-3"
+            >
+              <div className="flex flex-col">
+                <label htmlFor="" className="text-md  font-medium">
+                  Username
+                </label>
+                <input
+                  className=" border-2 border-orange-700/20 rounded py-1"
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={userform.username}
+                  onChange={handelform}
+                  placeholder="shubham123"
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="" className="text-md  font-medium">
+                  Email
+                </label>
+                <input
+                  className=" border-2 border-orange-700/20 rounded py-1"
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={userform.email}
+                  onChange={handelform}
+                  placeholder=" test123@gmail.com"
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="" className="text-md  font-medium">
+                  Moble No
+                </label>
+                <input
+                  className=" border-2 border-orange-700/20 rounded py-1"
+                  type="text"
+                  id="mobile"
+                  name="mobile"
+                  value={userform.mobile}
+                  onChange={handelform}
+                  placeholder="7038956822"
+                  required
+                />
+              </div>
+              <div className="flex flex-col pb-2">
+                <label htmlFor="" className="text-md  font-medium">
+                  Password
+                </label>
+                <input
+                  className=" border-2 border-orange-700/20 rounded py-1"
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={userform.password}
+                  onChange={handelform}
+                  placeholder=" test@123"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="py-2 bg-orange-300 px-5 rounded-lg"
+              >
+                Sigin Up
+              </button>
+            </form>
+            <div className="flex items-center justify-start gap-4">
+              <p>sign Up with</p>
+              <FcGoogle className="w-6 h-6" />
+              <FaFacebook className="w-6 h-6 text-blue-600" />
+            </div>
+            <div>
+              <p>
+                allready have an account ?{" "}
+                <span className="text-orange-500">
+                  <Link to="/Login">Sign in</Link>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Registers;
