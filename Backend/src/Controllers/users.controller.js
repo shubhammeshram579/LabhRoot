@@ -41,7 +41,7 @@ const UserRegiter =  async (req,res) => {
         }
 
         const user = await Users.create({
-            username:username.toLowerCase(),
+            username:username?.toLowerCase(),
             email,
             password,
             mobile
