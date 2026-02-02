@@ -12,6 +12,7 @@
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^5.1.2",
     "axios": "^1.13.2",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "lucide-react": "^0.553.0",
     "mapbox-gl": "^3.17.0",

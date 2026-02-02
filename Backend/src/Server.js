@@ -2,18 +2,23 @@ import express from "express"
 import UserRouter from "../src/Routers/users.routers.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import ConnectDB from "..//src/Db/connectDB.js"
+import ConnectDB from "../src/Db/connectDB.js"
+
+
+
+// database connection 
+ConnectDB()
+
 
 const app = express()
 
 // cousrs
 app.use(cors({
-    origin:process.env.CORS_ORIGIN,
+    origin:"http://localhost:5173",
     credentials:true
 }))
 
-// database connection 
-ConnectDB()
+
 
 
 // configration 

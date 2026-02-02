@@ -73,6 +73,8 @@ const UserLogin = async (req,res) => {
 
         const {email,password} = req.body;
 
+        console.log("body",req.body)
+
         if(!email || !password){
             throw new ApiError(400, "all filed required")
         }
@@ -95,11 +97,14 @@ const UserLogin = async (req,res) => {
 
        const loginUser = await Users.findById(user._id).select("-password -refreshToken")
 
+       console.log("loginUser",loginUser)
+
 
         // send cookie
         const options = {
             httpOnly: true,
-            secure: true
+            secure: true,
+            sameSite: "none",
         }
 
         return res
@@ -153,8 +158,28 @@ const UserLogout = async (req,res) => {
 
 }
 
+
+const CurretUser = async (req,res) => {
+    try {
+
+        const user = await Users.findOne({email:req?.user?.email})
+
+
+        return res
+        .status(200)
+        .json(new ApiResponse(200, {user}, "user succesfully"))
+
+
+        
+    } catch (error) {
+        throw new ApiError(400, error.message);
+    }
+
+}
+
 export {
     UserRegiter,
     UserLogin,
-    UserLogout
+    UserLogout,
+    CurretUser
 }

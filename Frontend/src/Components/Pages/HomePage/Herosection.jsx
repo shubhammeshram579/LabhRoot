@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useContext} from "react";
 import { ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import  AuthCreateContext  from "..//..//../Context/AuthCreateContext.js";
+
+
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const Herosection = () => {
+
+
+   const {user} = useContext(AuthCreateContext);
+
   const navigate = useNavigate();
 
   const [city, setCity] = useState("Detecting...");
@@ -84,7 +91,15 @@ const Herosection = () => {
   ];
 
   const HandelClickTruck = (id) => {
-    navigate(`/trucksDetails/${id}`);
+
+    // if(!user){
+      navigate(`/trucksDetails/${id}`);
+
+    // }else{
+    //   navigate(`/Login`);
+
+    // }
+    
   };
 
   return (

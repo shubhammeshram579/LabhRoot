@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState,useContext } from 'react'
+import { Link ,useNavigate} from 'react-router-dom'
 import img from "..//..//../public/dellevry.jpg"
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import  AuthCreateContext  from "..//../Context/AuthCreateContext.js";
 
 const Login = () => {
+    const navigate = useNavigate()
+    const  {login}  = useContext(AuthCreateContext);
     const [userform,setUserform] = useState({})
 
       const handelform = (e) => {
@@ -15,12 +18,22 @@ const Login = () => {
 
     const handelSumbit = async () => {
         try {
-          const res = await axios.post(`http://localhost:8000/api/users/login`,
-            userform,
-          );
+        //   const res = await axios.post(`http://localhost:8000/api/users/login`,
+        //     userform,
+        //     {withCredentials:true}
+        //   );
+
+        //   console.log("res",res)
+          login(userform)
+
+
+          setUserform({})
+
+
+
     
           
-          navigate(`/`)
+          navigate(`/home`)
         } catch (error) {
           console.log("api error ", error.message);
         }

@@ -21,7 +21,7 @@ const Registers = () => {
       );
 
       
-      navigate(`/Login`)
+      navigate(`/`)
     } catch (error) {
       console.log("api error ", error.message);
     }
@@ -122,7 +122,7 @@ const Registers = () => {
               <p>
                 allready have an account ?{" "}
                 <span className="text-orange-500">
-                  <Link to="/Login">Sign in</Link>
+                  <Link to="/">Sign in</Link>
                 </span>
               </p>
             </div>
