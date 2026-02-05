@@ -1,5 +1,6 @@
 import express from "express"
 import UserRouter from "../src/Routers/users.routers.js"
+import BookingRouter from "../src/Routers/booking.routers.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import ConnectDB from "../src/Db/connectDB.js"
@@ -29,6 +30,7 @@ app.use(cookieParser())
 
 
 app.use("/api/users", UserRouter)
+app.use("/api/booking", BookingRouter)
 
 app.get("/home",(req,res) => {
     res.send("sunnn")

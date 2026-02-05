@@ -47,7 +47,7 @@ const UserRegiter =  async (req,res) => {
             mobile
         })
 
-        const createUser = await Users.findById(user.id).select("-password");
+        const createUser = await Users.findById(user._id).select("-password");
 
         if(!createUser){
             throw new ApiError(400, "user not create sonthing error");
@@ -73,7 +73,7 @@ const UserLogin = async (req,res) => {
 
         const {email,password} = req.body;
 
-        console.log("body",req.body)
+        // console.log("body",req.body)
 
         if(!email || !password){
             throw new ApiError(400, "all filed required")
@@ -129,6 +129,8 @@ const UserLogin = async (req,res) => {
 const UserLogout = async (req,res) => {
     try {
 
+        // console.log( "user logout",req.user)
+
         await Users.findByIdAndUpdate(
         req.user._id,
         {
@@ -161,8 +163,11 @@ const UserLogout = async (req,res) => {
 
 const CurretUser = async (req,res) => {
     try {
+        const userId = req.user._id;
 
-        const user = await Users.findOne({email:req?.user?.email})
+        console.log(userId)
+
+        const user = await Users.findById(userId)
 
 
         return res

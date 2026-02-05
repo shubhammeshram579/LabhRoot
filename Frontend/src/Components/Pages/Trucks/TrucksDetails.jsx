@@ -14,8 +14,13 @@ const TrucksDetails = () => {
   // ✅ Mapbox states
   const [pickup, setPickup] = useState("");
   const [drop, setDrop] = useState("");
+  const [receiver ,setReceiver] = useState("")
+  const [receiverPhone ,setReceiverPhone] = useState("")
+  const [businerType ,setBusinerType] = useState("")
   const [pickupSug, setPickupSug] = useState([]);
   const [dropSug, setDropSug] = useState([]);
+
+  const [userform,setUserForm] = useState({})
 
   const [city, setCity] = useState("Detecting...");
   const [isCityOpen, setIsCityOpen] = useState(false);
@@ -36,8 +41,19 @@ const TrucksDetails = () => {
   // };
   const handelEstimatedbtn = () => {
     // e.preventdefault();
-    navigate(`/VehicleBooking`);
+
+    setUserForm({
+      pickup:pickup,
+      drop:drop,
+      receiver:receiver,
+      phone:receiverPhone,
+      type:businerType
+    })
+
+    // navigate(`/VehicleBooking`);
   };
+
+  console.log("formdata",userform)
 
   const vahicales = [
     {
@@ -185,12 +201,12 @@ const TrucksDetails = () => {
     <div className="min-h-screen">
       <div>
         <img
-          src="https://www.dispatchtrack.com/hubfs/delivery%20logistics.webp"
+          src="https://images.pexels.com/photos/6169178/pexels-photo-6169178.jpeg"
           alt=""
-          className="h-[70vh] w-full absolute z-10"
+          className="h-[70vh] w-full object-cover absolute z-10"
         />
         <div className="relative z-20 w-full px-[24vw] ">
-          <p className="text-center text-2xl pt-5 text-black font-semibold">
+          <p className="text-center text-2xl pt-5 text-white font-semibold">
             Get Convenient Mini Truck Online Booking in Pune Online truck
             booking service for goods transportation in Pune is now convenient
             and affordable with Porter. Let us cater to all your goods
@@ -346,13 +362,15 @@ const TrucksDetails = () => {
                 </div> */}
             <div className="flex flex-col border-r-2 pr-4">
               <label htmlFor="" className="text-black font-semibold">
-                Name <span className="text-red-500">*</span>
+                Receiver Name <span className="text-red-500">*</span>
               </label>
               <input
                 className=" border-2 border-gray-300 rounded text-black"
                 type="text"
                 placeholder="enter name"
                 required
+                value={receiver}
+                onChange={(e) => setReceiver(e.target.value)}
               />
             </div>
             <div className="flex flex-col border-r-2 pr-4">
@@ -364,6 +382,8 @@ const TrucksDetails = () => {
                 type="number"
                 placeholder="enter Number"
                 required
+                value={receiverPhone}
+                onChange={(e) => setReceiverPhone(e.target.value)}
               />
             </div>
             <div className="flex flex-col">
@@ -374,11 +394,13 @@ const TrucksDetails = () => {
                 name=""
                 id=""
                 className="border-2 border-gray-300 rounded text-black"
+                value={businerType}
+                onChange={(e) => setBusinerType(e.target.value)}
               >
                 <option value="Personal" className="text-black">
                   Personal
                 </option>
-                <option value="Personal" className="text-black">
+                <option value="Business" className="text-black">
                   Business
                 </option>
               </select>
