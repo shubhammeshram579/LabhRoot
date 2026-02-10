@@ -1,9 +1,8 @@
-import React,{useContext} from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import AuthCreateContext from "..//../Context/AuthCreateContext.js"
+import LogoutBtn from "../users/Logout.jsx"
 
 const Mainheader = () => {
-  const {logout} = useContext(AuthCreateContext)
   return (
     <>
     <div>
@@ -14,7 +13,7 @@ const Mainheader = () => {
             <div className='flex items-center justify-between gap-5'>
               <Link to="/home" className='text-white'>Home</Link>
               <Link to="/order" className='text-white'>Order</Link>
-              <Link to="/" className='text-white'><button onClick={logout()}>logout</button></Link>
+              <Link to="/login" className='text-white'><LogoutBtn /></Link>
                 <select name="" id="" className='bg-gray-700'>
                   <option value="#">menu</option>
                   <option value="#"><Link to="/" className='text-white'>Account</Link></option>

@@ -87,7 +87,7 @@ const UserLogin = async (req,res) => {
             throw new ApiError(400, "User not exid")
         }
 
-        const isuserpasswordValid = user.isPasswordCorrect(password)
+        const isuserpasswordValid = await user.isPasswordCorrect(password)
 
         if(!isuserpasswordValid){
              throw new ApiError(401, "Password is invaild")
@@ -103,9 +103,16 @@ const UserLogin = async (req,res) => {
         // send cookie
         const options = {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: false, 
+            sameSite: "lax",
         }
+
+
+        // const options = {
+        // httpOnly: true,
+        // secure: true,
+        // sameSite: "none",
+        // };
 
         return res
         .status(200)
@@ -145,8 +152,16 @@ const UserLogout = async (req,res) => {
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: false,
+        sameSite: "lax",
     }
+    
+    // const options = {
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: "none",
+    //     };
+
 
     return res
     .status(200)

@@ -2,6 +2,7 @@ import { ChevronDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "..//..//../api/axios"
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -17,10 +18,18 @@ const TrucksDetails = () => {
   const [receiver ,setReceiver] = useState("")
   const [receiverPhone ,setReceiverPhone] = useState("")
   const [businerType ,setBusinerType] = useState("")
+
+
   const [pickupSug, setPickupSug] = useState([]);
   const [dropSug, setDropSug] = useState([]);
 
-  const [userform,setUserForm] = useState({})
+  const [userform,setUserForm] = useState({
+      pickup:pickup,
+      drop:drop,
+      receiver:receiver,
+      phone:receiverPhone,
+      type:businerType
+    })
 
   const [city, setCity] = useState("Detecting...");
   const [isCityOpen, setIsCityOpen] = useState(false);
@@ -39,16 +48,31 @@ const TrucksDetails = () => {
   //   e.preventdefault();
   //   navigate(`/VehicleBooking`);
   // };
-  const handelEstimatedbtn = () => {
-    // e.preventdefault();
+  const handelEstimatedbtn = async (e) => {
+    e.preventdefault();
 
-    setUserForm({
-      pickup:pickup,
-      drop:drop,
-      receiver:receiver,
-      phone:receiverPhone,
-      type:businerType
-    })
+    try {
+
+       const res = await api.post(`/booking/createbooking`,
+        userform
+       )
+
+
+      return res.data.data;
+    } catch (error) {
+      console.log("api eroor", error.message)
+      
+    }
+
+   
+
+    // setUserForm({
+    //   pickup:pickup,
+    //   drop:drop,
+    //   receiver:receiver,
+    //   phone:receiverPhone,
+    //   type:businerType
+    // })
 
     // navigate(`/VehicleBooking`);
   };
@@ -251,29 +275,7 @@ const TrucksDetails = () => {
         </div>
 
         <div className="bg-gray-100 w-full h-44 rounded px-5">
-          <form className="flex items-center justify-between px-2 py-10">
-            {/* <div className="flex flex-col border-r-2 pr-4">
-                    <label htmlFor="" className="text-black font-semibold">Pickup Address <span className="text-red-500">*</span> </label>
-                    <input onChange={(e) => fetchPickup(e.target.value)} className=" border-2 border-gray-300 rounded text-black" type="text" placeholder="enter Pickup address" required  />
-
-                     {pickupSug.length > 0 && (
-                      <div className="absolute top-full left-0 bg-white border w-full z-50 max-h-40 overflow-y-auto">
-                        {pickupSug.map((item) => (
-                          <p
-                            key={item.id}
-                            className="p-2 hover:bg-gray-100 cursor-pointer text-black text-sm"
-                            onClick={() => {
-                              setPickup(item.place_name);
-                              setPickupSug([]);
-                            }}
-                          >
-                            {item.place_name}
-                          </p>
-                        ))}
-                      </div>
-                    )}
-                </div> */}
-
+          <form onSubmit={handelEstimatedbtn} className="flex items-center justify-between px-2 py-10">
             {/* ✅ Pickup Input */}
             <div className="flex flex-col relative border-r-2 pr-4">
               <label className="text-black font-semibold">
@@ -339,27 +341,6 @@ const TrucksDetails = () => {
                 </div>
               )}
             </div>
-
-            {/* <div className="flex flex-col border-r-2 pr-4">
-                    <label htmlFor="" className="text-black font-semibold">Drop Address <span className="text-red-500">*</span></label>
-                    <input onChange={(e) => fetchDrop(e.target.value)} className=" border-2 border-gray-300 rounded text-black" type="text" placeholder="enter drop address" required />
-                    {dropSug.length > 0 && (
-                      <div className="absolute top-full left-0 bg-white border w-full z-50 max-h-40 overflow-y-auto">
-                        {dropSug.map((item) => (
-                          <p
-                            key={item.id}
-                            className="p-2 hover:bg-gray-100 cursor-pointer text-black text-sm"
-                            onClick={() => {
-                              setDrop(item.place_name);
-                              setDropSug([]);
-                            }}
-                          >
-                            {item.place_name}
-                          </p>
-                        ))}
-                      </div>
-                    )}
-                </div> */}
             <div className="flex flex-col border-r-2 pr-4">
               <label htmlFor="" className="text-black font-semibold">
                 Receiver Name <span className="text-red-500">*</span>
@@ -406,7 +387,8 @@ const TrucksDetails = () => {
               </select>
             </div>
             <button
-              onClick={handelEstimatedbtn}
+              // onClick={handelEstimatedbtn}
+              type="submit"
               className="bg-blue-500 px-3 py-1 rounded-lg mt-5 text-white"
             >
               Get Fair Estimeted

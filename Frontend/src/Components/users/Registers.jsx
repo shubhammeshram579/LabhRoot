@@ -3,7 +3,7 @@ import { Link,useNavigate } from "react-router-dom";
 import img from "..//..//../public/dellevry.jpg";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
-import axios from "axios";
+import api from "..//../api/axios"
 
 const Registers = () => {
   const navigate = useNavigate()
@@ -16,12 +16,13 @@ const Registers = () => {
 
   const handelSumbit = async () => {
     try {
-      const res = await axios.post(`http://localhost:8000/api/users/createUsers`,
+      const res = await api.post(`/users/createUsers`,
         userform,
       );
 
       
-      navigate(`/`)
+      navigate(`/login`)
+      return res.data.data
     } catch (error) {
       console.log("api error ", error.message);
     }

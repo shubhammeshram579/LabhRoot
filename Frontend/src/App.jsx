@@ -29,7 +29,7 @@ function App() {
             <Route element={<Authlayout />}>
               {/* <Route path="/" element={<HomePage />} /> */}
               {/* <Route path="/Login" element={<Login />} /> */}
-              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/Registers" element={<Registers />} />
             </Route>
 
