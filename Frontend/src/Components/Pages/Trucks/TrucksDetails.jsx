@@ -23,14 +23,6 @@ const TrucksDetails = () => {
   const [pickupSug, setPickupSug] = useState([]);
   const [dropSug, setDropSug] = useState([]);
 
-  const [userform,setUserForm] = useState({
-      pickup:pickup,
-      drop:drop,
-      receiver:receiver,
-      phone:receiverPhone,
-      type:businerType
-    })
-
   const [city, setCity] = useState("Detecting...");
   const [isCityOpen, setIsCityOpen] = useState(false);
 
@@ -44,40 +36,37 @@ const TrucksDetails = () => {
     "Chennai",
   ];
 
-  // const handelEstimatedbtn = (e) => {
-  //   e.preventdefault();
-  //   navigate(`/VehicleBooking`);
-  // };
   const handelEstimatedbtn = async (e) => {
-    e.preventdefault();
+    e.preventDefault();
 
     try {
+      const paylod = {
+        pickup:pickup,
+        drop:drop,
+        receiver:receiver,
+        number:receiverPhone,
+        businesstype:businerType,
+      }
 
        const res = await api.post(`/booking/createbooking`,
-        userform
+        paylod
        )
+
+       console.log("ree",res.data)
+
+
+       setPickup("")
+       setDrop("")
+       setReceiver("")
+       setReceiverPhone("")
+       setBusinerType("")
 
 
       return res.data.data;
     } catch (error) {
       console.log("api eroor", error.message)
-      
     }
-
-   
-
-    // setUserForm({
-    //   pickup:pickup,
-    //   drop:drop,
-    //   receiver:receiver,
-    //   phone:receiverPhone,
-    //   type:businerType
-    // })
-
-    // navigate(`/VehicleBooking`);
   };
-
-  console.log("formdata",userform)
 
   const vahicales = [
     {

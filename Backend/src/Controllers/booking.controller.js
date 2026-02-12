@@ -9,7 +9,9 @@ const CreateBooking = async (req,res) => {
     try {
 
         const {pickup,drop,receiver,number,businesstype} = req.body;
-        const userId = req.user._id
+
+        console.log("req.body",req.body)
+        const userId = req.user?._id
 
         if(!pickup || !drop || !receiver || !number || !businesstype){
             throw new ApiError(400, "all filed is required")
@@ -42,6 +44,40 @@ const CreateBooking = async (req,res) => {
 
 }
 
+
+
+const getBookingByid = async (req,res) => {
+    try {
+
+        const {id} = req.params;
+
+        if(!id){
+            throw new ApiError(400, "booking id not found")
+        }
+
+
+        const booking = await Booking.findById(id)
+
+
+        console.log("booking",booking)
+
+        if(!booking){
+            throw new ApiError(400, "booking data not found")
+        }
+
+        return res.
+        status(200).json(
+            new ApiResponse(200,booking,"booking")
+        )
+        
+    } catch (error) {
+        throw new ApiError(500, error.message)
+        
+    }
+
+}
+
 export {
-    CreateBooking
+    CreateBooking,
+    getBookingByid
 }
