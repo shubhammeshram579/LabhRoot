@@ -52,7 +52,10 @@ const TrucksDetails = () => {
         paylod
        )
 
-       console.log("ree",res.data)
+      //  console.log("ree",res.data)
+
+
+       navigate(`/VehicleBooking`)
 
 
        setPickup("")

@@ -103,7 +103,7 @@ const UserLogin = async (req,res) => {
         // send cookie
         const options = {
             httpOnly: true,
-            secure: false, 
+            secure: true, 
             sameSite: "lax",
         }
 
@@ -152,7 +152,7 @@ const UserLogout = async (req,res) => {
 
     const options = {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "lax",
     }
     

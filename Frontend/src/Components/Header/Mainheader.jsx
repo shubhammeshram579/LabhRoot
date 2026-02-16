@@ -19,7 +19,7 @@ const Mainheader = () => {
                   <option value="#"><Link to="/" className='text-white'>Account</Link></option>
                   <option value="#"><Link to="/" className='text-white'>Payment</Link></option>
                   <option value="#"><Link to="/" className='text-white'>Coins</Link></option>
-                  <Link to="/Login" className='text-white'><option value="Login">Login</option></Link>
+                  <Link to="/login" className='text-white'><option value="Login">Login</option></Link>
                 </select>
             </div>
         </nav>

@@ -11,7 +11,7 @@ const Header = () => {
             {/* <Link to="/" className="text-white">
               Home
             </Link> */}
-            <Link to="/" className="text-white">
+            <Link to="/login" className="text-white">
               Login
             </Link>
           </div>

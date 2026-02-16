@@ -6,6 +6,7 @@ import Mainlayout from "./Layouts/Mainlayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 // pages
+import Home from "./Components/Pages/HomePage/Home"
 import HomePage from "./Components/Pages/HomePage/HomePage";
 import CusOrder from "./Components/Pages/Order/CusOrder";
 import TrucksDetails from "./Components/Pages/Trucks/TrucksDetails";
@@ -27,7 +28,7 @@ function App() {
 
             {/* Auth Routes */}
             <Route element={<Authlayout />}>
-              {/* <Route path="/" element={<HomePage />} /> */}
+              <Route path="/" element={<Home />} />
               {/* <Route path="/Login" element={<Login />} /> */}
               <Route path="/login" element={<Login />} />
               <Route path="/Registers" element={<Registers />} />

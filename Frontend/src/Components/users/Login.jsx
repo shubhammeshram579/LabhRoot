@@ -6,6 +6,7 @@ import { FaFacebook } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "..//../ReduxAuth/authSlice";
 import api from "..//../api/axios";
+import axios from "axios";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -24,11 +25,13 @@ const Login = () => {
   const handelSumbit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post(`/users/login`, userform);
+      const res = await axios.post(`http://localhost:8000/api/users/login`, userform,
+        {withCredentials:true}
+      );
 
-      //   console.log(res.data.data)
+      console.log(res.data.data)
 
-      dispatch(loginSuccess(res.data.data));
+      dispatch(loginSuccess(res.data.data.user));
 
       navigate(`/home`);
 
