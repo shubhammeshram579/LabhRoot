@@ -56,7 +56,7 @@ const getBookingByid = async (req,res) => {
         }
 
 
-        const booking = await Booking.findById(id)
+        const booking = await Booking.findById(id).populate('owner','mobile username')
 
 
         console.log("booking",booking)
@@ -67,7 +67,7 @@ const getBookingByid = async (req,res) => {
 
         return res.
         status(200).json(
-            new ApiResponse(200,booking,"booking")
+            new ApiResponse(200,{booking},"booking")
         )
         
     } catch (error) {

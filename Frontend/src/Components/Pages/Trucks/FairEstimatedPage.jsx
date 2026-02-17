@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MapPin, Phone, X, ChevronRight,CreditCard,Banknote } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useParams} from "react-router-dom";
 import axios from "axios";
+import api from "..//..//../api/axios"
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 export default function VehicleBooking() {
+  const {bookingId} = useParams()
   const navigat = useNavigate();
   const [selectedVehicle, setSelectedVehicle] = useState("open");
   const [showEditModal, setShowEditModal] = useState(false);
@@ -16,8 +18,9 @@ export default function VehicleBooking() {
     const [drop, setDrop] = useState("");
     const [pickupSug, setPickupSug] = useState([]);
     const [dropSug, setDropSug] = useState([]);
-    console.log(pickup)
-    console.log(pickupSug)
+
+
+    const [bookingdata ,setBookingData] = useState({})
 
   const [editData, setEditData] = useState({
     address: "Shivajinagar, Pune, Maharashtra, India",
@@ -37,6 +40,31 @@ export default function VehicleBooking() {
     "Furniture / Home Furnishing",
     "House Shifting",
   ];
+
+
+
+  useEffect(() => {
+    const fatchBooking = async () => {
+      try {
+
+        const response = await axios.get(`http://localhost:8000/api/booking/getallbooking/${bookingId}`)
+
+
+        // console.log("booking data",response.data)
+
+        setBookingData(response.data.data.booking)
+        
+      } catch (error) {
+        console.log("booking api error",error)
+        
+      }
+
+    }
+
+    fatchBooking()
+  },[])
+
+  console.log("bookingdata",bookingdata)
 
   const handelCategorySelect = (g) => {
     setSelectCategory(g)
@@ -131,8 +159,8 @@ export default function VehicleBooking() {
           <div className="flex items-start gap-3">
             <span className="text-green-600 mt-1"><MapPin size={18} /></span>
             <div>
-              <p className="font-semibold">Shubham meshram • 7038956822</p>
-              <p className="text-sm text-gray-600">Mahalunge, Pune, Maharashtra, India</p>
+              <p className="font-semibold">{bookingdata?.owner?.username} • {bookingdata?.owner?.mobile}</p>
+              <p className="text-sm text-gray-600">{bookingdata?.pickup}</p>
             </div>
             <button
               onClick={() => setShowEditModal(true)}
@@ -145,8 +173,8 @@ export default function VehicleBooking() {
           <div className="flex items-start gap-3">
             <span className="text-red-600 mt-1"><MapPin size={18} /></span>
             <div>
-              <p className="font-semibold">Shubham meshram • 7038956822</p>
-              <p className="text-sm text-gray-600">Shivajinagar, Pune, Maharashtra, India</p>
+              <p className="font-semibold">{bookingdata?.receiver} • {bookingdata?.number}</p>
+              <p className="text-sm text-gray-600">{bookingdata?.drop}</p>
             </div>
             <button
               onClick={() => setShowEditModal(true)}

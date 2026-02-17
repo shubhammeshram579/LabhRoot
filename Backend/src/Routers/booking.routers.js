@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 router.post("/createbooking",verifyJWT, CreateBooking)
-router.get("/booking/:id", getBookingByid)
+router.get("/getallbooking/:id", getBookingByid)
 
 
 export default router;

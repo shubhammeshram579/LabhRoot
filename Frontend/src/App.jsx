@@ -45,7 +45,7 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/order" element={<CusOrder />} />
               <Route path="/trucksDetails/:id" element={<TrucksDetails />} />
-              <Route path="/VehicleBooking" element={<VehicleBooking />} />
+              <Route path="/VehicleBooking/:bookingId" element={<VehicleBooking />} />
               <Route path="/BookingSuccefully/:id" element={<BookingSuccefully />}/>
               <Route path="/DeliveryMap" element={<DeliveryMap />} />
               <Route path="/TrackRider" element={<TrackRider />} />
