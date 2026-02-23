@@ -3,10 +3,11 @@ import { MapPin, Phone, X, ChevronRight,CreditCard,Banknote } from "lucide-react
 import { useNavigate ,useParams} from "react-router-dom";
 import axios from "axios";
 import api from "..//..//../api/axios"
+import vahicales from "..//..//../utils/Vehicles"
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 export default function VehicleBooking() {
-  const {bookingId} = useParams()
+  const {bookingId,id} = useParams()
   const navigat = useNavigate();
   const [selectedVehicle, setSelectedVehicle] = useState("open");
   const [showEditModal, setShowEditModal] = useState(false);
@@ -21,6 +22,9 @@ export default function VehicleBooking() {
 
 
     const [bookingdata ,setBookingData] = useState({})
+    const [vahicaldata ,setVahicalData] = useState({})
+
+    console.log("vahicaldata",vahicaldata)
 
   const [editData, setEditData] = useState({
     address: "Shivajinagar, Pune, Maharashtra, India",
@@ -40,6 +44,12 @@ export default function VehicleBooking() {
     "Furniture / Home Furnishing",
     "House Shifting",
   ];
+
+
+  // console.log("vahicales",vahicales)
+
+
+
 
 
 
@@ -85,30 +95,66 @@ export default function VehicleBooking() {
 
   const vehicles = [
     {
+      _id: 1,
       id: "open",
       title: "Tata Ace (Open)",
-      price: 859,
+      priceToll:59,
+      netvalue:800,
+      paidprice: 859,
       time: "14 min away",
       weight: "750 Kg",
       size: "7.0ft x 4.0ft x 5.0ft",
+      imgae:"https://offers.caimahindra.com/uploads/product/maxx-pik-up-white.png",
     },
     {
+      _id:2,
       id: "closed",
       title: "Tata Ace (Closed)",
       price: 828,
       time: "17 min",
       weight: "750 Kg",
       size: "7.0ft x 4.0ft x 5.0ft",
+      imgae:"https://cdn.trucksfloor.com/vehicles/truck/trf/tata-intra-v30/tata-intra-v30-1.jpg",
     },
     {
+      _id:3,
       id: "any",
       title: "Tata Ace (Any)",
       price: 828,
       time: "17 min",
       weight: "750 Kg",
       size: "7.0ft x 4.0ft x 5.0ft",
+      imgae:"https://d3bslevwxw022c.cloudfront.net/buytrucknbus-tatamotors-com/cv/cv_online/VehicleImages/55459425AJSR/5599.webp",
     },
   ];
+
+
+  // const filterdata = vehicles.filter((item) => (item._id == parseInt(id)))
+
+
+
+  // console.log("filterdata",filterdata)
+
+
+  useEffect(() => {
+
+    const fatchVehical = () => {
+
+      // const filterdata = vehicles.filter((item) => (item._id == parseInt(id)))
+      const filterdata = vehicles.filter((item) => {
+        if(item._id == parseInt(id)){
+          // console.log("dddd",item)
+          setVahicalData(item)
+        }
+      })
+
+    }
+
+    fatchVehical()
+
+  },[])
+
+
 
 
 
@@ -190,25 +236,25 @@ export default function VehicleBooking() {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span>Trip Fare (incl. Toll, if applicable)</span>
-            <span>₹858.55</span>
+            <span>₹{vahicaldata.priceToll}</span>
           </div>
 
           <div className="flex justify-between font-semibold">
             <span>Net Fare</span>
-            <span>₹859.00</span>
+            <span>₹{vahicaldata.netvalue}</span>
           </div>
 
           <div className="flex justify-between font-bold text-lg mt-2">
             <span>Amount Payable</span>
-            <span>₹859.00</span>
+            <span>₹ {vahicaldata.paidprice}</span>
           </div>
         </div>
 
-        <button
+        {/* <button
           className="mt-4 text-blue-600 text-sm"
         >
           Select Goods Type
-        </button>
+        </button> */}
       </div>
 
       {/* RIGHT SIDE */}
@@ -216,29 +262,28 @@ export default function VehicleBooking() {
         <h2 className="text-xl font-bold mb-4">Select Vehicle</h2>
 
         <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-          {vehicles.map((v) => (
+          {/* {vehicles.map((v) => ( */}
             <div
-              key={v.id}
-              onClick={() => setSelectedVehicle(v.id)}
+              onClick={() => setSelectedVehicle(vahicaldata.id)}
               className={`border rounded-xl p-4 cursor-pointer transition shadow-sm hover:shadow-md ${
-                selectedVehicle === v.id ? "border-blue-600 bg-blue-50" : "border-gray-300"
+                selectedVehicle === vahicaldata.id ? "border-blue-600 bg-blue-50" : "border-gray-300"
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-bold">{v.title}</p>
-                  <p className="text-sm text-gray-600 mt-1">{v.time}</p>
-                  <p className="text-sm text-gray-700 mt-1">{v.weight} • {v.size}</p>
+                  <p className="font-bold">{vahicaldata.title}</p>
+                  <p className="text-sm text-gray-600 mt-1">{vahicaldata.time}</p>
+                  <p className="text-sm text-gray-700 mt-1">{vahicaldata.weight} • {vahicaldata.size}</p>
                 </div>
-                <p className="text-lg font-bold">₹ {v.price}</p>
+                <p className="text-lg font-bold">₹ {vahicaldata.paidprice}</p>
               </div>
             </div>
-          ))}
+          {/* ))} */}
         </div>
 
         <div className="flex justify-between items-center mt-6">
           <p className="font-semibold text-lg">Payment Method</p>
-          <p className="font-bold text-lg">₹ 859</p>
+          <p className="font-bold text-lg">₹ {vahicaldata.paidprice}</p>
         </div>
 
         <div className="flex items-center justify-start gap-1">

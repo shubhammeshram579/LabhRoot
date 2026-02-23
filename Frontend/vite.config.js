@@ -9,4 +9,7 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  define: {
+    global: {}, // Add this to polyfill global
+  },
 })

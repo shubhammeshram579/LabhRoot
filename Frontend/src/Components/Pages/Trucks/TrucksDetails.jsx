@@ -1,12 +1,13 @@
 import { ChevronDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useParams} from "react-router-dom";
 import axios from "axios";
 import api from "..//..//../api/axios"
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const TrucksDetails = () => {
+  const {id} = useParams()
   const navigate = useNavigate();
   const [isShowing, setIsshowing] = useState(true);
   const [belowV, setBelowV] = useState([]);
@@ -54,7 +55,7 @@ const TrucksDetails = () => {
 
        console.log("ree",res.data.data.booking._id)
 
-       navigate(`/VehicleBooking/${res.data.data.booking._id}`)
+       navigate(`/VehicleBooking/${res.data.data.booking._id}/${id}`)
 
 
        setPickup("")
