@@ -15,6 +15,8 @@ export default function VehicleBooking() {
   const [selectCategory ,setSelectCategory] = useState("");
   const [paymentmode ,setPayementmode] = useState("")
 
+  console.log("paymentmode",paymentmode)
+
   const [pickup, setPickup] = useState("");
     const [drop, setDrop] = useState("");
     const [pickupSug, setPickupSug] = useState([]);
@@ -89,9 +91,7 @@ export default function VehicleBooking() {
     setShowGoodsModal(false)
   }
 
-  const handelBooking = () => {
-    navigat(`/BookingSuccefully/:id`)
-  }
+ 
 
   const vehicles = [
     {
@@ -193,6 +193,33 @@ export default function VehicleBooking() {
     );
     setDropSug(res.data.features);
   };
+
+
+   const handelBooking = async () => {
+    try {
+      const payload = {
+        vehicleName:vahicaldata.title,
+        priceToll:vahicaldata.priceToll,
+        netvalue:vahicaldata.netvalue,
+        paidprice:vahicaldata.paidprice,
+        weight:vahicaldata.weight,
+        size:vahicaldata.size,
+        paymentMode:paymentmode,
+        goodsTypes:selectCategory,
+        bookingAddressId:bookingdata?._id,
+      }
+
+      const res = await api.post(`/booking-order/bookingorder`,payload)
+
+      console.log(res.data)
+  
+      
+      navigat(`/BookingSuccefully/${res?.data?._id}`)
+    } catch (error) {
+      console.log("something error",error)
+      
+    }
+  }
 
   return (
     <>

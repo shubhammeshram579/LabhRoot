@@ -13,9 +13,10 @@ const CreateBookingOrder = async (req, res) => {
       size,
       paymentMode,
       goodsTypes,
-      owner,
       bookingAddressId,
     } = req.body;
+
+    console.log("req.body",req.body)
 
     const userId = req.user?._id;
 
