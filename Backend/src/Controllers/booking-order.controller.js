@@ -79,4 +79,33 @@ const GetBookingOrderbyId = async (req, res) => {
   }
 };
 
-export { CreateBookingOrder, GetBookingOrderbyId };
+
+const GetallBookingbyUser = async (req,res) => {
+  try {
+
+     const userId = req.user?._id
+
+    console.log(userId)
+
+    if(!userId){
+      throw new ApiError(400, "userId not found ");
+
+    }
+
+    const orderbookinglist = await BookingOrder.findById(userId);
+
+    if(!orderbookinglist){
+       throw new ApiError(400, "booking not found ");
+    }
+
+
+    return res.status(200).json( new ApiResponse(201 , {orderbookinglist} , "booking get succefully"))
+    
+  } catch (error) {
+      throw new ApiError(500, error.message);
+    
+  }
+
+} 
+
+export { CreateBookingOrder, GetBookingOrderbyId , GetallBookingbyUser };
