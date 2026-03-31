@@ -92,14 +92,14 @@ const GetallBookingbyUser = async (req,res) => {
 
     }
 
-    const orderbookinglist = await BookingOrder.findById(userId);
+    const orderbookinglist = await BookingOrder.find({owner:userId}).populate("bookingAddressId");
 
     if(!orderbookinglist){
        throw new ApiError(400, "booking not found ");
     }
 
 
-    return res.status(200).json( new ApiResponse(201 , {orderbookinglist} , "booking get succefully"))
+    return res.status(200).json( new ApiResponse(201 , orderbookinglist , "booking get succefully"))
     
   } catch (error) {
       throw new ApiError(500, error.message);
