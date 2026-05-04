@@ -2,6 +2,7 @@ import express from "express"
 import UserRouter from "../src/Routers/users.routers.js"
 import BookingRouter from "../src/Routers/booking.routers.js"
 import BookingOrderRouter from "../src/Routers/booking-order.routers.js"
+import DriverRouter from "../src/Routers/Driver/driver.routers.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import ConnectDB from "../src/Db/connectDB.js"
@@ -33,6 +34,9 @@ app.use(cookieParser())
 app.use("/api/users", UserRouter)
 app.use("/api/booking", BookingRouter)
 app.use("/api/booking-order", BookingOrderRouter)
+
+// driver routers
+app.use("/api/drivers", DriverRouter)
 
 app.get("/home",(req,res) => {
     res.send("sunnn")
