@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
 
 const driverSchema = new mongoose.Schema(
   {
@@ -18,6 +20,14 @@ const driverSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
+    },
+    password:{
+        type:String,
+         required: true,
+    },
+     role:{
+        type:String,
+        default:"driver"
     },
 
     license_number: {
@@ -76,10 +86,58 @@ const driverSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+     refreshToken:{
+        type: String,
+    }
   },
   {
     timestamps: true,
   },
 );
+
+
+// midelwere 
+driverSchema.pre("save", async function(){
+    if(!this.isModified("password")) return;
+    this.password = await bcrypt.hash(this.password, 10)
+})
+
+
+// methods
+driverSchema.methods.isPasswordCorrect = async function(password){
+    return await bcrypt.compare(password,this.password)
+}
+
+
+// methods secret token
+driverSchema.methods.generateAccessToken = function(){
+    return jwt.sign(
+        {
+            _id: this._id,
+            email: this.email,
+            driver_name:this.driver_name
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+        }
+    )
+
+}
+
+
+// generateRefreshToken for cookieys
+driverSchema.methods.generateRefreshToken = function(){
+    return jwt.sign(
+        {
+            _id: this._id,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+        }
+    )
+    
+}
 
 export const Driver = mongoose.model("Driver", driverSchema);
