@@ -185,8 +185,10 @@ const DriverLogout = async (req, res) => {
 const  GetCurrectDriver = async (req,res) => {
   try {
 
-    // const userId = req.user._id;
-    const userId = "69fcf5be9cad0cfe1ff7ff3f";
+    const userId = req.user._id;
+
+    console.log(req.user._id)
+    // const userId = "69fcf5be9cad0cfe1ff7ff3f";
 
 
     const  currentDeriver = await Driver.findById(userId);
