@@ -6,7 +6,7 @@ import {verifyJWTDriver} from "../../Middleware/userAuth.js"
 const router = express.Router()
 
 
-router.post("/createDriver",DriverRegister)
+router.post("/driverRigister",DriverRegister)
 router.post("/loginDriver",DriverLogin)
 router.post("/logoutDriver",verifyJWTDriver, DriverLogout)
 router.get("/currentDriver",verifyJWTDriver ,GetCurrectDriver)

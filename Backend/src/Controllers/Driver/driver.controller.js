@@ -42,7 +42,7 @@ const DriverRegister = async (req, res) => {
       pincode,
     } = req.body;
 
-    console.log("req.body", req.body);
+    // console.log("req.body", req.body);
 
     if (!driver_name || !email || !password || !vehicle_type) {
       throw new ApiError(400, "All required fields are mandatory");

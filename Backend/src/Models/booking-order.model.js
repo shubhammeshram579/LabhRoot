@@ -6,6 +6,10 @@ const bookingOrderSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Users",
         },
+        driver: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Driver",
+        },
         bookingAddressId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Booking",
@@ -46,6 +50,19 @@ const bookingOrderSchema = new mongoose.Schema(
         goodsTypes:{
             type:String,
             required:true
+        },
+        stutus:{
+            type:String,
+            enum: [
+            "pending",
+            "accepted",
+            "pickup",
+            "in-transit",
+            "delivery complete",
+            "cancelled",
+            "failed"
+        ],
+        default: "pending",
         }
 
 
